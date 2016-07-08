@@ -7,9 +7,9 @@ module.exports = grunt => {
 	'use strict';
 
 	const appjs = [
-		'.',
-		'src'
-	].map( i => i + '/*.js' );
+		'*.js',
+		'src/**/*.js'
+	];
 
 	grunt.initConfig({
 		watch: {

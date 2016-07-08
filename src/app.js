@@ -1,11 +1,24 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
+import {render} from 'react-dom';
+import {Nav} from './components/nav';
 
-const App = React.createClass({
-	render: function() {
-		return ( <div>Text text text</div> );
+import './app.css';
+
+class App extends React.Component {
+	render() {
+		let navItems = [
+			{ href: '/', name: 'Profile' },
+			{ href: '/domain', name: 'Domains' },
+			{ href: '/member', name: 'Members' },
+			{ href: '/office', name: 'Offices' }
+		];
+		return (
+			<div>
+				<Nav items={navItems} />
+				<div>Text text text</div>
+			</div>
+		);
 	}
-});
+}
 
-const mountNode = document.querySelector( '#root' );
-ReactDOM.render( <App />, mountNode );
+render( <App />, document.getElementById( 'app' ) );
