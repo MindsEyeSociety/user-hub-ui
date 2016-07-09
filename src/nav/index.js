@@ -1,1 +1,3 @@
-export * from './components/*.jsx'
+export * from './components/*.jsx';
+
+export const NAME = 'nav';

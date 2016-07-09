@@ -2,53 +2,12 @@ import React from 'react';
 import {render} from 'react-dom';
 import {Router, Route, IndexRoute, browserHistory} from 'react-router';
 
-import {Nav} from './components/nav';
-import {Profile} from './components/profile';
-import {Domains} from './components/domain';
-import {Members} from './components/member';
+import {Nav} from './nav';
+import {Profile} from './profile';
+import {Domains} from './domain';
+import {Members} from './member';
 
 import './app.css';
-
-const profile = {
-	"id":8,
-	"portalID":375,
-	"firstName":"Ephraim",
-	"lastName":"Gregor",
-	"nickname":null,
-	"address":null,
-	"email":"ephraimgregor@gmail.com",
-	"membershipType":"Full",
-	"membershipNumber":"US2012030038",
-	"membershipExpiration":"2017-09-05T00:00:00.000Z",
-	"orgUnit":{
-		"id":3,
-		"name":"Children of the Lost Eden",
-		"code":"NY-004",
-		"type":"Domain"
-	},
-	"offices":[
-		{
-			"id":7,
-			"name":"DC",
-			"email":null,
-			"type":"Primary",
-			"parentOfficeID":null,
-			"parentPath":"1.3.7",
-			"parentOrgID":3,
-			"userID":8,
-			"roles":[
-				"user_read_private",
-				"user_update",
-				"user_assign",
-				"org_update",
-				"office_update",
-				"office_assign",
-				"office_create_assistants"
-			]
-		}
-	],
-	"fullName":"Ephraim Gregor"
-};
 
 const navItems = [
 	{ href: '/', name: 'Profile' },
@@ -72,10 +31,10 @@ class App extends React.Component {
 
 render(
 	<Router history={browserHistory}>
-		<Route path="/" component={App}>
-			<IndexRoute component={Profile} user={profile} />
-			<Route path="domain" component={Domains} />
-			<Route path="member" component={Members} />
+		<Route path='/' component={App}>
+			<IndexRoute component={Profile} />
+			<Route path='domain' component={Domains} />
+			<Route path='member' component={Members} />
 		</Route>
 	</Router>,
 	document.getElementById( 'app' )

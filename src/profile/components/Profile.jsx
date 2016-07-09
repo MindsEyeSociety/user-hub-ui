@@ -1,5 +1,6 @@
 import React from 'react';
 import moment from 'moment';
+import {profile as data} from '../data.js';
 
 export class Profile extends React.Component {
 	render() {
