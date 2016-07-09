@@ -5,6 +5,10 @@ const app     = express();
 
 app.use( '/static', express.static( 'dist' ) );
 
+/**
+ * @TODO Add logic to log user in before presenting logic layer.
+ */
+
 app.get( '*', ( req, res ) => {
 	res.sendFile( path.resolve( __dirname, 'index.html' ) );
 });
