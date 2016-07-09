@@ -3,11 +3,11 @@ import moment from 'moment';
 
 export class Profile extends React.Component {
 	render() {
-		let user = this.props.user;
+		let user = this.props.route.user;
 		let expire = moment( user.membershipExpiration );
 
 		let expires = expire.calendar();
-		if ( ! expire.isBefore() ) {
+		if ( expire.isBefore() ) {
 			expires = <strong className='text-danger'>{ expires }</strong>;
 		}
 

@@ -1,7 +1,11 @@
 import React from 'react';
 import {render} from 'react-dom';
+import {Router, Route, IndexRoute, browserHistory} from 'react-router';
+
 import {Nav} from './components/nav';
 import {Profile} from './components/profile';
+import {Domains} from './components/domain';
+import {Members} from './components/member';
 
 import './app.css';
 
@@ -60,10 +64,19 @@ class App extends React.Component {
 				<header>
 					<Nav items={navItems} />
 				</header>
-				<Profile user={profile} />
+				{this.props.children}
 			</div>
 		);
 	}
 }
 
-render( <App />, document.getElementById( 'app' ) );
+render(
+	<Router history={browserHistory}>
+		<Route path="/" component={App}>
+			<IndexRoute component={Profile} user={profile} />
+			<Route path="domain" component={Domains} />
+			<Route path="member" component={Members} />
+		</Route>
+	</Router>,
+	document.getElementById( 'app' )
+);
