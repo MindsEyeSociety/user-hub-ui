@@ -1,11 +1,11 @@
 import React from 'react';
-import {render} from 'react-dom';
-import {Router, Route, IndexRoute, browserHistory} from 'react-router';
+import { render } from 'react-dom';
+import { Router, Route, IndexRoute, browserHistory } from 'react-router';
 
-import {Nav} from './nav';
-import {Profile} from './profile';
-import {Domains} from './domain';
-import {Members} from './member';
+import { Nav } from './nav';
+import { Profile } from './profile';
+import { Domains } from './domain';
+import { Members } from './member';
 
 import './app.css';
 
