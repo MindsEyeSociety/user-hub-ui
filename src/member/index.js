@@ -1,3 +1,4 @@
-export * from './components/*.jsx';
+export * from './components/Members.jsx';
+export * from './components/MemberItem.jsx';
 
 export const NAME = 'member';

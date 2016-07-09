@@ -1,3 +1,3 @@
-export * from './components/*.jsx';
+export * from './components/Domains.jsx';
 
 export const NAME = 'domain';

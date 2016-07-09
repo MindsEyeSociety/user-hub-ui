@@ -1,5 +1,5 @@
 import React from 'react';
-import {NavItem, NavLogout} from './'
+import {NavItem, NavLogout} from '../'
 
 export class Nav extends React.Component {
 	render() {

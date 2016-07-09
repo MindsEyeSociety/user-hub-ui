@@ -1,3 +1,3 @@
-export * from './components/*.jsx';
+export * from './components/Profile.jsx';
 
 export const NAME = 'profile';

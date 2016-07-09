@@ -1,10 +1,9 @@
 import React from 'react';
 import moment from 'moment';
-import {profile as data} from '../data.js';
+import {profile as user} from '../data.js';
 
 export class Profile extends React.Component {
 	render() {
-		let user = this.props.route.user;
 		let expire = moment( user.membershipExpiration );
 
 		let expires = expire.calendar();
