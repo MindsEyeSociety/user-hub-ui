@@ -1,5 +1,5 @@
 import { dispatch } from 'redux';
-import Profile from './model';
+import Profile from './models';
 
 export const FETCH   = 'profile/UPDATE';
 export const RECEIVE = 'profile/RECEIVE';

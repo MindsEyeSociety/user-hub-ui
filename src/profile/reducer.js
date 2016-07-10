@@ -1,8 +1,8 @@
 import { UPDATE } from './actions';
-import Model from './model';
+import { Profile } from './models';
 import { Map } from 'immutable';
 
-const initialState = new Model();
+const initialState = new Profile();
 
 export default ( state = initialState, action ) => {
 	switch ( action.type ) {
