@@ -1,6 +1,6 @@
 import React from 'react';
 
-export class Domains extends React.Component {
+export default class Domains extends React.Component {
 	render() {
 		return (
 			<main id='app'>

@@ -1,6 +1,6 @@
 import React from 'react';
 
-export class MemberItem extends React.Component {
+export default class MemberItem extends React.Component {
 	render() {
 		let member = this.props.member;
 		return (
