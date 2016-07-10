@@ -1,23 +1,5 @@
-import { Record, List, Map } from 'immutable';
+import Member from '../member';
 
-const Profile = new Record({
-	id: undefined,
-	firstName: '',
-	lastName: '',
-	fullName: '',
-	'nickname': '',
-	'address': undefined,
-	'email': undefined,
-	'membershipType': 'Full',
-	'membershipNumber': '',
-	'membershipExpiration': '',
-	'orgUnit': new Record({
-		'id': undefined,
-		'name': '',
-		'code': '',
-		'type': 'Domain'
-	}),
-	'offices': new List()
-});
+const Profile = Member.models.Member;
 
 export default Profile;

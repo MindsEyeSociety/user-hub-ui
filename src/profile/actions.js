@@ -1,9 +1,20 @@
 import { dispatch } from 'redux';
-import { Profile } from './model';
+import Profile from './model';
 
-export const UPDATE = 'profile/UPDATE';
+export const FETCH   = 'profile/UPDATE';
+export const RECEIVE = 'profile/RECEIVE';
+export const ERROR   = 'profile/ERROR';
 
-export const update = ( data ) => ({
-	type: UPDATE,
+export const fetch = () => ({
+	type: FETCH
+});
+
+export const receive = data => ({
+	type: RECEIVE,
 	payload: new Profile( data )
+});
+
+export const error = err => ({
+	type: ERROR,
+	payload: err
 });
