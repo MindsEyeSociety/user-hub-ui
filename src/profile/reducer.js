@@ -1,7 +1,8 @@
 import { UPDATE } from './actions';
+import Model from './model';
 import { Map } from 'immutable';
 
-const initialState = Map();
+const initialState = new Model();
 
 export default ( state = initialState, action ) => {
 	switch ( action.type ) {

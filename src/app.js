@@ -1,6 +1,10 @@
 import React from 'react';
 import { render } from 'react-dom';
 import { Router, Route, IndexRoute, browserHistory } from 'react-router';
+import { Provider } from 'react-redux';
+import { createStore } from 'redux';
+
+import reducer from './rootReducer';
 
 import { Nav } from './nav';
 import { Profile } from './profile';
@@ -29,13 +33,17 @@ class App extends React.Component {
 	}
 }
 
+let store = createStore( reducer );
+
 render(
-	<Router history={browserHistory}>
-		<Route path='/' component={App}>
-			<IndexRoute component={Profile} />
-			<Route path='domain' component={Domains} />
-			<Route path='member' component={Members} />
-		</Route>
-	</Router>,
+	<Provider store={ store }>
+		<Router history={browserHistory}>
+			<Route path='/' component={App}>
+				<IndexRoute component={Profile} />
+				<Route path='domain' component={Domains} />
+				<Route path='member' component={Members} />
+			</Route>
+		</Router>
+	</Provider>,
 	document.getElementById( 'app' )
 );

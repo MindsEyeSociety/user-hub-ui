@@ -2,7 +2,7 @@ import React from 'react';
 import moment from 'moment';
 import { profile as user } from '../data.js';
 
-export class Profile extends React.Component {
+export default class Profile extends React.Component {
 	render() {
 		let expire = moment( user.membershipExpiration );
 
