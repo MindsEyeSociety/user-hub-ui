@@ -10,6 +10,7 @@ import { Nav } from './nav';
 import { Profile } from './profile';
 import { Domains } from './domain';
 import { Members } from './member';
+import { NoMatch } from './shared';
 
 import './app.css';
 
@@ -42,6 +43,7 @@ render(
 				<IndexRoute component={Profile} />
 				<Route path='domain' component={Domains} />
 				<Route path='member' component={Members} />
+				<Route path='*' component={NoMatch} />
 			</Route>
 		</Router>
 	</Provider>,

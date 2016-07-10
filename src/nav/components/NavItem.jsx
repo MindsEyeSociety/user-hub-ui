@@ -1,15 +1,19 @@
 import React from 'react';
+import { Link } from 'react-router';
 
-export class NavItem extends React.Component {
+export default class NavItem extends React.Component {
 	render() {
-		let isActive = -1 !== document.location.pathname.indexOf( this.props.item.href );
-		if ( '/' === this.props.item.href ) {
-			isActive = '/' === document.location.pathname;
-		}
-		let activeClass = isActive ? 'active' : '';
+		let isHome = this.props.item.href === '/'
 		return (
-			<li className={'nav-item ' + activeClass}>
-				<a href={this.props.item.href} className="nav-link">{this.props.item.name}</a>
+			<li className='nav-item'>
+				<Link
+					to={ this.props.item.href }
+					className='nav-link'
+					activeClassName='active'
+					onlyActiveOnIndex={ isHome }
+				>
+					{ this.props.item.name }
+				</Link>
 			</li>
 		);
 	}

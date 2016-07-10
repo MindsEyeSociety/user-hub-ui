@@ -1,12 +1,13 @@
 import React from 'react';
-import {NavItem, NavLogout} from '../'
+import { withRouter, Link } from 'react-router';
+import { NavItem, NavLogout } from './';
 
-export class Nav extends React.Component {
-	render() {
+const Nav = React.createClass({
+	render: function() {
 		let createItem = ( item, index ) => <NavItem key={index} item={item} />;
 		return (
 			<nav className='navbar navbar-light' id='nav'>
-				<a className='navbar-brand' href='/'>MES Hub</a>
+				<Link className='navbar-brand' to='/'>MES Hub</Link>
 				<ul className='nav navbar-nav'>
 					{ this.props.items.map( createItem ) }
 				</ul>
@@ -16,4 +17,6 @@ export class Nav extends React.Component {
 			</nav>
 		);
 	}
-}
+});
+
+export default Nav;

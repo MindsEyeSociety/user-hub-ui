@@ -1,6 +1,6 @@
 import React from 'react';
 
-export class NavLogout extends React.Component {
+export default class NavLogout extends React.Component {
 	render() {
 		return (
 			<a href='#' id='logout' className='btn btn-secondary'>

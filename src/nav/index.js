@@ -1,5 +1,6 @@
-export * from './components/Nav.jsx';
-export * from './components/NavItem.jsx';
-export * from './components/NavLogout.jsx';
+import * as components from './components';
 
 export const NAME = 'nav';
+
+export const Nav = components.Nav;
+export default { components };
