@@ -4,5 +4,5 @@ import * as models from './models';
 import reducer from './reducer';
 
 export const NAME = 'profile';
-export const Profile = components.Profile;
-export default { actions, components, models, reducer };
+export const Profile = components.ProfileContainer;
+export default { actions, components, models, reducer, NAME };

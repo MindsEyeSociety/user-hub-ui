@@ -1,4 +1,4 @@
-export const profile = {
+export default {
 	'id':8,
 	'portalID':375,
 	'firstName':'Ephraim',

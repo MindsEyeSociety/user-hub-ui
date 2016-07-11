@@ -1,42 +1,46 @@
-import React from 'react';
+import React, { Component } from 'react';
+import { Link } from 'react-router';
 import moment from 'moment';
-import { profile as user } from '../data.js';
 
-export default class Profile extends React.Component {
+export default class Profile extends Component {
 	render() {
-		let expire = moment( user.membershipExpiration );
+		let profile = this.props.profile;
+		let expire = moment( profile.membershipExpiration );
 
 		let expires = expire.calendar();
 		if ( expire.isBefore() ) {
 			expires = <strong className='text-danger'>{ expires }</strong>;
 		}
 
-		let orgName = user.orgUnit.name + ' (' + user.orgUnit.code + ')';
+		let orgLink = <em>None</em>;
+		if ( profile.orgUnit ) {
+			orgLink = <Link to={ '/domain/' + profile.orgUnit.code }>{ profile.orgUnit.name + ' (' + profile.orgUnit.code + ')' }</Link>;
+		}
 
-		let officeMap = office => <li key={ office.id }><a href={ '/office/' + office.id }>{ office.name }</a></li>;
+		let officeMap = office => <li key={ office.id }><Link to={ '/office/' + office.id }>{ office.name }</Link></li>;
 
 		return (
 			<main id='app'>
-				<h1>{ user.fullName }</h1>
-				<h2 className='text-muted'>{ user.membershipNumber }</h2>
+				<h1>{ profile.fullName }</h1>
+				<h2 className='text-muted'>{ profile.membershipNumber }</h2>
 				<p>
-					Information: <a href={ '/member/' + user.id + '/edit' } className='text-muted'>(edit)</a>
+					Information: <a href={ '/member/' + profile.id + '/edit' } className='text-muted'>(edit)</a>
 				</p>
 				<ul>
 					<li>
-						Email: <a href={ 'mailto:' + user.email }>{ user.email }</a>
+						Email: <a href={ 'mailto:' + profile.email }>{ profile.email }</a>
 					</li>
 					<li>
 						Expires: { expires }
 					</li>
 					<li>
-						Domain: <a href={ '/domain/' + user.orgUnit.code }>{ orgName }</a>
+						Domain: { orgLink }
 					</li>
 				</ul>
 
 				<p>Offices:</p>
 				<ul>
-					{ user.offices.map( officeMap ) }
+					{ profile.offices.map( officeMap ) }
 				</ul>
 			</main>
 		);

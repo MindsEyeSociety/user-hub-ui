@@ -12,7 +12,10 @@ export const Member = new Record({
 	'membershipNumber': '',
 	'membershipExpiration': '',
 	'orgUnit': undefined,
-	'offices': new List()
+	'offices': new List(),
+	portalID: undefined,
+	isFetching: false,
+	lastUpdated: undefined
 });
 
 export const Members = new Record({
