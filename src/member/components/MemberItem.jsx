@@ -6,7 +6,7 @@ export default class MemberItem extends React.Component {
 		let member = this.props.member;
 		return (
 			<li>
-				<Link to={ '/member/' + member.id }>
+				<Link to={ '/member/' + member.membershipNumber }>
 					{ member.fullName } ({ member.membershipNumber })
 				</Link>
 			</li>

@@ -1,5 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router';
+import { MemberItem } from '../../member';
 
 export default class Domain extends React.Component {
 	render() {
@@ -14,6 +15,12 @@ export default class Domain extends React.Component {
 			<main id='app'>
 				<h1>{ name }</h1>
 				{ this.parentBreadcrumbs() }
+				<p>Officers:</p>
+				<ul>{ domain.offices.map( this.officerItem, this ) }</ul>
+				<p>Members:</p>
+				<ul>
+					{ domain.users.map( user => <MemberItem key={ user.id } member={ user } /> ) }
+				</ul>
 			</main>
 		);
 	}
@@ -26,7 +33,7 @@ export default class Domain extends React.Component {
 		let breadcrumbs = this.props.domain.parents.map( parent => {
 			return (
 				<li key={ parent.id } className='breadcrumb-item'>
-					<Link to={ '/domain/' + parent.id }>{ parent.name }</Link>
+					<Link to={ '/domain/' + parent.code }>{ parent.name }</Link>
 				</li>
 			);
 		});
@@ -39,6 +46,29 @@ export default class Domain extends React.Component {
 			<ol className='breadcrumb'>
 				{ breadcrumbs }
 			</ol>
+		);
+	}
+
+	officerItem( officer ) {
+		let memberLink = member => {
+			if ( ! member ) {
+				return <em className='text-muted'>Vacant</em>;
+			}
+
+			let name = member.fullName || member.firstName + ' ' + member.lastName;
+
+			return (
+				<Link to={ '/member/' + member.membershipNumber }>
+					{ name } ({ member.membershipNumber })
+				</Link>
+			);
+		};
+
+		return (
+			<li key={ officer.id }>
+				{ officer.name } &ndash;&nbsp;
+				{ memberLink( officer.user ) }
+			</li>
 		);
 	}
 }
