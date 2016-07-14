@@ -11,8 +11,8 @@ import reducer from './rootReducer';
 
 import { Nav } from './nav';
 import { Profile } from './profile';
-import { Domains } from './domain';
-import { Members } from './member';
+import { Domain, Domains } from './domain';
+import { Member, Members } from './member';
 import { NoMatch } from './shared';
 
 import './app.css';
@@ -29,9 +29,9 @@ class App extends React.Component {
 		return (
 			<div>
 				<header>
-					<Nav items={navItems} />
+					<Nav items={ navItems } />
 				</header>
-				{this.props.children}
+				{ this.props.children }
 			</div>
 		);
 	}
@@ -47,12 +47,20 @@ let store = createStore(
 
 render(
 	<Provider store={ store }>
-		<Router history={browserHistory}>
-			<Route path='/' component={App}>
-				<IndexRoute component={Profile} />
-				<Route path='domain' component={Domains} />
-				<Route path='member' component={Members} />
-				<Route path='*' component={NoMatch} />
+		<Router history={ browserHistory }>
+			<Route path='/' component={ App}>
+				<IndexRoute component={ Profile } />
+				<Route path='domain'>
+					<IndexRoute component={ Domains } />
+					<Route path=':id' component={ Domain } />
+					<Route path=':id/edit' component={ Domain } />
+				</Route>
+				<Route path='member'>
+					<IndexRoute component={ Members } />
+					<Route path=':id' component={ Member } />
+					<Route path=':id/edit' component={ Member } editMode={ true } />
+				</Route>
+				<Route path='*' component={ NoMatch } />
 			</Route>
 		</Router>
 	</Provider>,

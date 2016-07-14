@@ -1,4 +1,4 @@
-export const members = [
+export default [
 	{
 		'id':1,
 		'membershipNumber':'US2016010001',

@@ -5,7 +5,7 @@ const src  = path.resolve( __dirname, 'src' );
 const dist = path.resolve( __dirname, 'dist' );
 
 var config = {
-	entry: path.join( src, 'app.js' ),
+	entry: path.join( src, 'app.jsx' ),
 	output: {
 		path: dist,
 		filename: 'bundle.js'

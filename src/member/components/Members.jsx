@@ -1,5 +1,5 @@
 import React from 'react';
-import { members as data } from '../data.js';
+import data from '../data.js';
 import { MemberItem } from './';
 
 export default class Members extends React.Component {
