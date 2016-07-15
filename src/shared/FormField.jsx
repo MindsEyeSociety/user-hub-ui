@@ -2,6 +2,7 @@ import React, { PropTypes } from 'react';
 
 export class FormField extends React.Component {
 	render() {
+		let slug = this.props.attrs.name.toLowerCase().replace( ' ', '' );
 		let attrs = Object.assign({
 			type: 'text',
 			className: '',
@@ -9,7 +10,6 @@ export class FormField extends React.Component {
 			placeholder: this.props.attrs.name,
 			required: true
 		}, this.props.attrs );
-		let slug = attrs.name.toLowerCase().replace( ' ', '' );
 
 		return (
 			<div className='form-group row'>
@@ -19,7 +19,7 @@ export class FormField extends React.Component {
 				<div className='col-sm-10'>
 					<input
 						type={ attrs.type }
-						className='form-control { attrs.className }'
+						className={ 'form-control ' + attrs.className }
 						id={ attrs.id }
 						placeholder={ attrs.placeholder }
 						defaultValue={ attrs.value }

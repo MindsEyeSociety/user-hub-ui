@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router';
 import { MemberItem } from '../../member';
+import { MaybeItem } from '../../shared';
 
 export default class Domain extends React.Component {
 	render() {
@@ -15,6 +16,12 @@ export default class Domain extends React.Component {
 			<main id='app'>
 				<h1>{ name }</h1>
 				{ this.parentBreadcrumbs() }
+				<p>Information:</p>
+				<ul>
+					<MaybeItem name='Website' extLink={ domain.website } />
+					<MaybeItem name='Location' value={ domain.location } />
+					<MaybeItem name='Details' value={ domain.defDoc } />
+				</ul>
 				<p>Officers:</p>
 				<ul>{ domain.offices.map( this.officerItem, this ) }</ul>
 				<p>Members:</p>
