@@ -3,7 +3,11 @@ import { Link } from 'react-router';
 
 export class MaybeItem extends React.Component {
 	render() {
-		let val = this.props.value || this.props.intLink || this.props.extLink;
+		let val = this.props.value;
+
+		if ( ! this.props.hasOwnProperty( 'value' ) ) {
+			val = this.props.intLink || this.props.extLink;
+		}
 
 		if ( ! val ) {
 			return null;

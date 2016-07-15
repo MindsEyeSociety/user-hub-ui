@@ -7,9 +7,9 @@ export default class Domain extends React.Component {
 	render() {
 		let domain = this.props.domain.unit;
 
-		let name = domain.name;
-		if ( 'venue' === domain.type ) {
-			name = <span className='text-muted'>{ domain.code }:</span> + ' ' + name;
+		let name = [ domain.name ];
+		if ( 'venue' !== domain.type ) {
+			name.unshift( <span className='text-muted'>{ domain.code }:</span>, ' ' );
 		}
 
 		return (

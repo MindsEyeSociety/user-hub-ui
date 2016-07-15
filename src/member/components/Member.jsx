@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router';
 import moment from 'moment';
+import { MaybeItem } from '../../shared';
 
 export default class Member extends React.Component {
 	render() {
@@ -8,7 +9,7 @@ export default class Member extends React.Component {
 
 		let editLink = '';
 		if ( true ) {
-			editLink = <Link to={ '/member/' + member.id + '/edit' } className='text-muted'>(edit)</Link>;
+			editLink = <Link to={ '/member/' + member.membershipNumber + '/edit' } className='text-muted'>(edit)</Link>;
 		}
 
 		let expire = moment( member.membershipExpiration );
@@ -23,11 +24,6 @@ export default class Member extends React.Component {
 			orgLink = <Link to={ '/domain/' + member.orgUnit.code }>{ member.orgUnit.name + ' (' + member.orgUnit.code + ')' }</Link>;
 		}
 
-		let email = '';
-		if ( member.email ) {
-			email = <li>Email: <a href={ 'mailto:' + member.email }>{ member.email }</a></li>;
-		}
-
 		return (
 			<main id='app'>
 				<h1>{ member.fullName }</h1>
@@ -36,7 +32,7 @@ export default class Member extends React.Component {
 					Information: { editLink }
 				</p>
 				<ul>
-					{ email }
+					<MaybeItem name='Email' extLink={ 'mailto:' + member.email } value={ member.email } />
 					<li>
 						Expires: { expires }
 					</li>
