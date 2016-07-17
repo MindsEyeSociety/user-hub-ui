@@ -23,7 +23,12 @@ var config = {
 				loader: 'style-loader!css-loader'
 			}
 		]
-	}
+	},
+	plugins: [
+		new webpack.DefinePlugin({
+			__DEV__: JSON.stringify( 'production' !== process.env.NODE_ENV )
+		})
+	]
 };
 
 module.exports = config;

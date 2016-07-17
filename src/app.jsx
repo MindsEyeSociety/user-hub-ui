@@ -7,6 +7,11 @@ import { Provider } from 'react-redux';
 import thunkMiddleware from 'redux-thunk';
 import createLogger from 'redux-logger';
 
+import Immutable from 'immutable';
+import ImmutableDevTools from 'immutable-devtools';
+
+ImmutableDevTools( Immutable );
+
 import reducer from './rootReducer';
 
 import { Nav } from './nav';
