@@ -22,6 +22,7 @@ export const Domains = new Record({
 	isFetching: false,
 	didInvalidate: false,
 	lastUpdated: undefined,
+	current: null,
 	items: new Map()
 });
 

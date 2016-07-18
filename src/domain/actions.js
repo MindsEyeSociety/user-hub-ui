@@ -1,14 +1,6 @@
 import { dispatch } from 'redux';
-import { Domain, Domains } from './models';
 import { Map, List } from 'immutable';
-
-function mapDomain( domain ) {
-	domain.lastUpdated = Date.now();
-	if ( domain.children ) {
-		domain.children = new List( domain.children.map( d => d.id ) );
-	}
-	return [ domain.id, new Domain( domain ) ];
-}
+import { Domain, Domains } from './models';
 
 export const REQUEST = 'domain/REQUEST';
 function request( id = 0 ) {
@@ -23,11 +15,12 @@ function receive( data ) {
 	let now = Date.now();
 	let domain = data.unit;
 
-	domain.lastUpdated = now;
-	domain.users       = new List( domain.users.map( m => m.id ) );
-	domain.offices     = new List( domain.offices.map( m => m.id ) );
-	domain.parents     = new List( data.parents.map( m => m.id ) );
-	domain.children    = new List( data.children.map( m => m.id ) );
+	domain.lastUpdated   = now;
+	domain.didInvalidate = false;
+	domain.users         = new List( domain.users.map( m => m.id ) );
+	domain.offices       = new List( domain.offices.map( m => m.id ) );
+	domain.parents       = new List( data.parents.map( m => m.id ) );
+	domain.children      = new List( data.children.map( m => m.id ) );
 
 	return {
 		type: RECEIVE,
@@ -39,25 +32,19 @@ function receive( data ) {
 
 export const RECEIVE_MANY = 'domain/RECEIVE_MANY';
 function receiveMany( data ) {
-	let now = Date.now();
+	let mapDomain = domain => {
+		domain.lastUpdated = Date.now();
+		domain.didInvalidate = true;
+		if ( domain.children ) {
+			domain.children = new List( domain.children.map( d => d.id ) );
+		}
+		return [ domain.id, new Domain( domain ) ];
+	};
+
 	return {
 		type: RECEIVE_MANY,
-		payload: new Domains({
-			lastUpdated: now,
-			items: new Map( data.map( mapDomain ) )
-		}),
-		receivedAt: now
-	};
-}
-
-export const INSERT_MANY = 'domain/INSERT_MANY';
-function insertMany( data ) {
-	return {
-		type: INSERT_MANY,
-		payload: new Domains({
-			lastUpdated: Date.now(),
-			items: new Map( data.map( mapDomain ) )
-		})
+		payload: new Map( data.map( mapDomain ) ),
+		receivedAt: Date.now()
 	};
 }
 
@@ -84,7 +71,7 @@ function fetchDomain( id = '' ) {
 				return dispatch( receiveMany( json ) );
 			} else {
 				dispatch( receive( json ) );
-				dispatch( insertMany( [].concat( json.parents, json.children ) ) );
+				dispatch( receiveMany( [].concat( json.parents, json.children ) ) );
 			}
 		})
 		.catch( err => dispatch( error( err ) ) );
@@ -93,8 +80,8 @@ function fetchDomain( id = '' ) {
 
 function shouldFetchDomain( state, id ) {
 	const domains = state.domain;
-	const domain  = domains.items[ id ];
-	if ( id && ( ! domain || ! domain.isFetching ) ) {
+	const domain  = domains.items.get( id ) || domains.items.find( d => id === d.get( 'code' ) );
+	if ( id && ( ! domain || domain.didInvalidate ) ) {
 		return true;
 	} else if ( ! id && ( ! domains || ! domains.isFetching ) ) {
 		return true;

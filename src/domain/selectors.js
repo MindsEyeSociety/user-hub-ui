@@ -42,4 +42,4 @@ export const getChildrenForDomain = createSelector(
 		.map( d => domains.get( d ) )
 		.filter( d => d );
 	}
-)
+);
