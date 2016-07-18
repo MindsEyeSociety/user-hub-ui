@@ -30,3 +30,16 @@ export const getParentsForDomain = createSelector(
 		.filter( d => d );
 	}
 );
+
+export const getChildrenForDomain = createSelector(
+	getDomains,
+	getDomainById,
+	( domains, child ) => {
+		if ( ! Object.keys( child ).length ) {
+			return new List();
+		}
+		return child.get( 'children' )
+		.map( d => domains.get( d ) )
+		.filter( d => d );
+	}
+)

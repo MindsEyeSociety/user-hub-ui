@@ -4,6 +4,9 @@ import { Map, List } from 'immutable';
 
 function mapDomain( domain ) {
 	domain.lastUpdated = Date.now();
+	if ( domain.children ) {
+		domain.children = new List( domain.children.map( d => d.id ) );
+	}
 	return [ domain.id, new Domain( domain ) ];
 }
 

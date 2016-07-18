@@ -1,5 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router';
+import { DomainItem } from './';
 import { MemberItem } from '../../member';
 import { MaybeItem } from '../../shared';
 
@@ -19,6 +20,9 @@ export default class Domain extends React.Component {
 				</ul>
 				<p>Officers:</p>
 				<p>Children:</p>
+				<ul>
+					{ this.props.childs.map( m => <DomainItem domain={ m } key={ m.id } /> ) }
+				</ul>
 				<p>Members:</p>
 			</main>
 		);
