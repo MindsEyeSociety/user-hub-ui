@@ -14,5 +14,10 @@ export const getMemberById = createSelector(
 
 export const getMemberList = createSelector(
 	state => state.member.items.toList(),
-	( members = {} ) => members
+	( members = [] ) => members
+);
+
+export const getMembersByDomain = createSelector(
+	( state, props ) => state.member.items.filter( m => props.params.id === m.get( 'orgUnit' ) ),
+	( members = [] ) => members
 );

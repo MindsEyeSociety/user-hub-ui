@@ -5,16 +5,11 @@ import { MaybeItem } from '../../shared';
 
 export default class Domain extends React.Component {
 	render() {
-		let domain = this.props.domain.unit;
-
-		let name = [ domain.name ];
-		if ( 'venue' !== domain.type ) {
-			name.unshift( <span className='text-muted'>{ domain.code }:</span>, ' ' );
-		}
+		let domain = this.props.domain;
 
 		return (
 			<main id='app'>
-				<h1>{ name }</h1>
+				{ this.name() }
 				{ this.parentBreadcrumbs() }
 				<p>Information:</p>
 				<ul>
@@ -23,21 +18,31 @@ export default class Domain extends React.Component {
 					<MaybeItem name='Details' value={ domain.defDoc } />
 				</ul>
 				<p>Officers:</p>
-				<ul>{ domain.offices.map( this.officerItem, this ) }</ul>
+				<p>Children:</p>
 				<p>Members:</p>
-				<ul>
-					{ domain.users.map( user => <MemberItem key={ user.id } member={ user } /> ) }
-				</ul>
 			</main>
 		);
 	}
 
+	name() {
+		if ( 'venue' !== this.props.domain.type ) {
+			return (
+				<h1>
+					{ this.props.domain.name }
+					<span className='text-muted'>{ this.props.domain.code }</span>
+				</h1>
+			);
+		} else {
+			return( <h1>{ this.props.domain.name }</h1> );
+		}
+	}
+
 	parentBreadcrumbs() {
-		if ( ! this.props.domain.parents ) {
+		if ( ! this.props.parents ) {
 			return '';
 		}
 
-		let breadcrumbs = this.props.domain.parents.map( parent => {
+		let breadcrumbs = this.props.parents.toArray().map( parent => {
 			return (
 				<li key={ parent.id } className='breadcrumb-item'>
 					<Link to={ '/domain/' + parent.code }>{ parent.name }</Link>
@@ -45,8 +50,8 @@ export default class Domain extends React.Component {
 			);
 		});
 		breadcrumbs.push(
-			<li className='active breadcrumb-item' key={ this.props.domain.unit.id }>
-				{ this.props.domain.unit.name }
+			<li className='active breadcrumb-item' key={ this.props.domain.id }>
+				{ this.props.domain.name }
 			</li>
 		);
 		return (

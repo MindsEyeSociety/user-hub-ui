@@ -102,3 +102,13 @@ export function fetchMembersIfNeeded() {
 		}
 	};
 }
+
+export function createMemberIfNeeded( data ) {
+	return ( dispatch, getState ) => {
+		if ( shouldFetchMember( getState(), data.id ) ) {
+			return dispatch( receive( data ) );
+		} else {
+			return Promise.resolve();
+		}
+	}
+}

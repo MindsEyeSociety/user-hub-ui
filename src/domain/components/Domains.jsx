@@ -1,10 +1,9 @@
 import React from 'react';
-import { list as data } from '../data.js';
 import { DomainItem } from './';
 
 export default class Domains extends React.Component {
 	render() {
-		let domains = data.map( domain => {
+		let domains = this.props.domains.map( domain => {
 			return <DomainItem key={ domain.id } domain={ domain } />;
 		});
 		return (

@@ -1,31 +1,43 @@
 import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
-import { Domain, DomainEdit } from './';
-import { domain as data } from '../data.js';
+import { Domain } from './';
+import { fetchDomainIfNeeded } from '../actions';
+import { getDomainById, getParentsForDomain } from '../selectors';
+import { Loading } from '../../shared';
 
 class DomainContainer extends React.Component {
 	componentDidMount() {
 		const { dispatch } = this.props;
-		// dispatch( fetchProfileIfNeeded() );
+		dispatch( fetchDomainIfNeeded( this.id ) );
 	}
 
 	render() {
-		if ( this.props.route.editMode ) {
-			return( <DomainEdit domain={ data } /> );
+		if ( ! Object.keys( this.props.domain ).length ) {
+			return( <Loading /> );
+		} else if ( this.props.route.editMode ) {
+			// return( <DomainEdit domain={ this.props.domain } /> );
 		} else {
-			return( <Domain domain={ data } /> );
+			return( <Domain
+				domain={ this.props.domain }
+				parents={ this.props.parents }
+			/> );
 		}
+	}
+
+	get id() {
+		return this.props.params.id;
 	}
 }
 
 DomainContainer.propTypes = {
-// 	Domain: PropTypes.object.isRequired,
+	domain:   PropTypes.object.isRequired,
+	parents:  PropTypes.object.isRequired,
 	dispatch: PropTypes.func.isRequired
 }
 
-function mapStateToProps( state ) {
-	const { domain } = state;
-	return { domain };
-}
+const mapStateToProps = ( state, props ) => ({
+	domain:  getDomainById( state, props ),
+	parents: getParentsForDomain( state, props )
+});
 
 export default connect( mapStateToProps )( DomainContainer );
