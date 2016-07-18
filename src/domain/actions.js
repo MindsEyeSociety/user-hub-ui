@@ -2,6 +2,11 @@ import { dispatch } from 'redux';
 import { Domain, Domains } from './models';
 import { Map, List } from 'immutable';
 
+function mapDomain( domain ) {
+	domain.lastUpdated = Date.now();
+	return [ domain.id, new Domain( domain ) ];
+}
+
 export const REQUEST = 'domain/REQUEST';
 function request( id = 0 ) {
 	return {
@@ -16,10 +21,10 @@ function receive( data ) {
 	let domain = data.unit;
 
 	domain.lastUpdated = now;
-	domain.users    = new List( domain.users.map( m => m.id ) );
-	domain.offices  = new List( domain.offices.map( m => m.id ) );
-	domain.parents  = new List( data.parents.map( m => m.id ) );
-	domain.children = new List( data.children.map( m => m.id ) );
+	domain.users       = new List( domain.users.map( m => m.id ) );
+	domain.offices     = new List( domain.offices.map( m => m.id ) );
+	domain.parents     = new List( data.parents.map( m => m.id ) );
+	domain.children    = new List( data.children.map( m => m.id ) );
 
 	return {
 		type: RECEIVE,
@@ -32,20 +37,24 @@ function receive( data ) {
 export const RECEIVE_MANY = 'domain/RECEIVE_MANY';
 function receiveMany( data ) {
 	let now = Date.now();
-	let domains = data
-	.map( d => {
-		d.lastUpdated = now;
-		return d;
-	})
-	.map( d => [ d.id, new Domain( d ) ] );
-
 	return {
 		type: RECEIVE_MANY,
 		payload: new Domains({
 			lastUpdated: now,
-			items: new Map( domains )
+			items: new Map( data.map( mapDomain ) )
 		}),
 		receivedAt: now
+	};
+}
+
+export const INSERT_MANY = 'domain/INSERT_MANY';
+function insertMany( data ) {
+	return {
+		type: INSERT_MANY,
+		payload: new Domains({
+			lastUpdated: Date.now(),
+			items: new Map( data.map( mapDomain ) )
+		})
 	};
 }
 
@@ -71,7 +80,8 @@ function fetchDomain( id = '' ) {
 			if ( Array.isArray( json ) ) {
 				return dispatch( receiveMany( json ) );
 			} else {
-				return dispatch( receive( json ) );
+				dispatch( receive( json ) );
+				dispatch( insertMany( [].concat( json.parents, json.children ) ) );
 			}
 		})
 		.catch( err => dispatch( error( err ) ) );

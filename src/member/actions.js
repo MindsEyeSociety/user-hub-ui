@@ -110,5 +110,5 @@ export function createMemberIfNeeded( data ) {
 		} else {
 			return Promise.resolve();
 		}
-	}
+	};
 }

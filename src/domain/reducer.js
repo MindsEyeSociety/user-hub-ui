@@ -13,7 +13,8 @@ export default function( state = initialState, action ) {
 				.set( 'lastUpdated', action.receivedAt )
 				.set( 'isFetching', false );
 		case actions.RECEIVE_MANY:
-			return state.merge( action.payload );
+		case actions.INSERT_MANY:
+			return state.mergeDeep( action.payload );
 		case actions.ERROR:
 			console.error( action.payload );
 			return state;

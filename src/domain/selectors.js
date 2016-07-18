@@ -1,4 +1,5 @@
 import { createSelector } from 'reselect';
+import { List } from 'immutable';
 
 const getCurrentId = ( state, props ) => props.params.id;
 
@@ -18,9 +19,14 @@ export const getDomainList = createSelector(
 );
 
 export const getParentsForDomain = createSelector(
-	getDomainList,
+	getDomains,
 	getDomainById,
 	( domains, child ) => {
-		return domains.filter( d => -1 !== child.parents.indexOf( domains.id ) );
+		if ( ! Object.keys( child ).length ) {
+			return new List();
+		}
+		return child.get( 'parents' )
+		.map( d => domains.get( d ) )
+		.filter( d => d );
 	}
 );

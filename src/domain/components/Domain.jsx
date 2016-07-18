@@ -28,8 +28,8 @@ export default class Domain extends React.Component {
 		if ( 'venue' !== this.props.domain.type ) {
 			return (
 				<h1>
+					<span className='text-muted'>{ this.props.domain.code }:</span>&nbsp;
 					{ this.props.domain.name }
-					<span className='text-muted'>{ this.props.domain.code }</span>
 				</h1>
 			);
 		} else {
