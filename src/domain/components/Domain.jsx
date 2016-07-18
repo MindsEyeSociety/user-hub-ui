@@ -24,6 +24,9 @@ export default class Domain extends React.Component {
 					{ this.props.childs.map( m => <DomainItem domain={ m } key={ m.id } /> ) }
 				</ul>
 				<p>Members:</p>
+				<ul>
+					{ this.props.members.map( m => <MemberItem member={ m } key={ m.id } /> ) }
+				</ul>
 			</main>
 		);
 	}

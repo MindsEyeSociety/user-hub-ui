@@ -20,8 +20,12 @@ export default class Member extends React.Component {
 		}
 
 		let orgLink = <em>None</em>;
-		if ( member.orgUnit ) {
-			orgLink = <Link to={ '/domain/' + member.orgUnit.code }>{ member.orgUnit.name + ' (' + member.orgUnit.code + ')' }</Link>;
+		if ( this.props.domain ) {
+			orgLink = (
+				<Link to={ '/domain/' + this.props.domain.code }>
+					{ this.props.domain.name + ' (' + this.props.domain.code + ')' }
+				</Link>
+			);
 		}
 
 		return (

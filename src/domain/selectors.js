@@ -43,3 +43,9 @@ export const getChildrenForDomain = createSelector(
 		.filter( d => d );
 	}
 );
+
+export const getMembersForDomain = createSelector(
+	getDomainById,
+	state => state.member.items,
+	( domain, members ) => members.filter( m => domain.get( 'id' ) === m.get( 'orgUnit' ) )
+);

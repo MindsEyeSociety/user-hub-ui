@@ -8,7 +8,7 @@ export const Domain = new Record({
 	location: undefined,
 	website: undefined,
 	defDoc: undefined,
-	users: new List(),
+	members: new List(),
 	offices: new List(),
 	children: new List(),
 	parents: new List(),

@@ -1,6 +1,7 @@
 import { dispatch } from 'redux';
 import { Map, List } from 'immutable';
 import { Domain, Domains } from './models';
+import { createMembersForDomain } from '../member/actions';
 
 export const REQUEST = 'domain/REQUEST';
 function request( id = 0 ) {
@@ -13,14 +14,16 @@ function request( id = 0 ) {
 export const RECEIVE = 'domain/RECEIVE';
 function receive( data ) {
 	let now = Date.now();
-	let domain = data.unit;
+	let domain = Object.assign( {}, data.unit );
 
 	domain.lastUpdated   = now;
 	domain.didInvalidate = false;
-	domain.users         = new List( domain.users.map( m => m.id ) );
+	domain.members       = new List( domain.users.map( m => m.id ) );
 	domain.offices       = new List( domain.offices.map( m => m.id ) );
 	domain.parents       = new List( data.parents.map( m => m.id ) );
 	domain.children      = new List( data.children.map( m => m.id ) );
+
+	delete domain.users;
 
 	return {
 		type: RECEIVE,
@@ -44,6 +47,18 @@ function receiveMany( data ) {
 	return {
 		type: RECEIVE_MANY,
 		payload: new Map( data.map( mapDomain ) ),
+		receivedAt: Date.now()
+	};
+}
+
+export const CREATE = 'domain/CREATE';
+function create( domain ) {
+	domain.lastUpdated = Date.now();
+	domain.didInvalidate = true;
+	return {
+		type: CREATE,
+		id: domain.id,
+		payload: new Domain( domain ),
 		receivedAt: Date.now()
 	};
 }
@@ -72,6 +87,7 @@ function fetchDomain( id = '' ) {
 			} else {
 				dispatch( receive( json ) );
 				dispatch( receiveMany( [].concat( json.parents, json.children ) ) );
+				dispatch( createMembersForDomain( json.unit.users, json.unit.id ) );
 			}
 		})
 		.catch( err => dispatch( error( err ) ) );
@@ -106,6 +122,14 @@ export function fetchDomainsIfNeeded() {
 			return dispatch( fetchDomain() );
 		} else {
 			return Promise.resolve();
+		}
+	};
+}
+
+export function createDomain( domain ) {
+	return ( dispatch, getState ) => {
+		if ( shouldFetchDomain( getState(), domain.id ) ) {
+			dispatch( create( domain ) );
 		}
 	};
 }

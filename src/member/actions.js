@@ -1,6 +1,8 @@
 import { dispatch } from 'redux';
-import { Member, Members } from './models';
 import { Map } from 'immutable';
+
+import { Member, Members } from './models';
+import { createDomain } from '../domain/actions';
 
 export const REQUEST = 'member/REQUEST';
 function request( id = 0 ) {
@@ -12,8 +14,10 @@ function request( id = 0 ) {
 
 export const RECEIVE = 'member/RECEIVE';
 function receive( data ) {
+	data = Object.assign( {}, data );
 	let now = Date.now();
 	data.lastUpdated = now;
+	data.orgUnit = data.orgUnit.id;
 	return {
 		type: RECEIVE,
 		id: data.id,
@@ -64,7 +68,8 @@ function fetchMember( id = '' ) {
 			if ( Array.isArray( json ) ) {
 				return dispatch( receiveMany( json ) );
 			} else {
-				return dispatch( receive( json ) );
+				dispatch( receive( json ) );
+				dispatch( createDomain( json.orgUnit ) );
 			}
 		})
 		.catch( err => dispatch( error( err ) ) );
@@ -103,12 +108,12 @@ export function fetchMembersIfNeeded() {
 	};
 }
 
-export function createMemberIfNeeded( data ) {
-	return ( dispatch, getState ) => {
-		if ( shouldFetchMember( getState(), data.id ) ) {
-			return dispatch( receive( data ) );
-		} else {
-			return Promise.resolve();
-		}
+export function createMembersForDomain( data, domainId ) {
+	return dispatch => {
+		let members = data.map( m => {
+			m.orgUnit = domainId;
+			return m;
+		});
+		dispatch( receiveMany( members ) );
 	};
 }

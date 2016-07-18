@@ -14,6 +14,7 @@ export default function( state = initialState, action ) {
 			return newState;
 
 		case actions.RECEIVE:
+		case actions.CREATE:
 			return state
 			.setIn( [ 'items', action.id ], action.payload )
 			.set( 'lastUpdated', action.receivedAt )

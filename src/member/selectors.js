@@ -1,4 +1,5 @@
 import { createSelector } from 'reselect';
+import { Map } from 'immutable';
 
 const memberById = ( state, props ) => {
 	let id      = props.params.id;
@@ -17,7 +18,13 @@ export const getMemberList = createSelector(
 	( members = [] ) => members
 );
 
-export const getMembersByDomain = createSelector(
-	( state, props ) => state.member.items.filter( m => props.params.id === m.get( 'orgUnit' ) ),
-	( members = [] ) => members
+export const getMemberDomain = createSelector(
+	getMemberById,
+	state => state.domain.items,
+	( member, domains ) => {
+		if ( ! Object.keys( member ).length ) {
+			return new Map();
+		}
+		return domains.get( member.get( 'orgUnit' ) );
+	}
 );

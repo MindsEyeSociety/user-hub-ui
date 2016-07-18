@@ -2,7 +2,7 @@ import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { Member, MemberEdit } from './';
 import { fetchMemberIfNeeded } from '../actions';
-import { getMemberById } from '../selectors';
+import { getMemberById, getMemberDomain } from '../selectors';
 import { Loading } from '../../shared';
 
 class MemberContainer extends React.Component {
@@ -17,7 +17,7 @@ class MemberContainer extends React.Component {
 		} else if ( this.props.route.editMode ) {
 			return( <MemberEdit member={ this.props.member } /> );
 		} else {
-			return( <Member member={ this.props.member } /> );
+			return( <Member member={ this.props.member } domain={ this.props.domain } /> );
 		}
 	}
 
@@ -28,9 +28,11 @@ class MemberContainer extends React.Component {
 
 MemberContainer.propTypes = {
 	member:   PropTypes.object.isRequired,
+	domain:   PropTypes.object,
 	dispatch: PropTypes.func.isRequired
 }
 
 export default connect( ( state, props ) => ({
-	member: getMemberById( state, props )
+	member: getMemberById( state, props ),
+	domain: getMemberDomain( state, props )
 }) )( MemberContainer );
