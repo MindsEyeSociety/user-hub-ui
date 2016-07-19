@@ -17,7 +17,9 @@ function receive( data ) {
 	data = Object.assign( {}, data );
 	let now = Date.now();
 	data.lastUpdated = now;
-	data.orgUnit = data.orgUnit.id;
+	if ( data.orgUnit ) {
+		data.orgUnit = data.orgUnit.id;
+	}
 	return {
 		type: RECEIVE,
 		id: data.id,
@@ -69,7 +71,9 @@ function fetchMember( id = '' ) {
 				return dispatch( receiveMany( json ) );
 			} else {
 				dispatch( receive( json ) );
-				dispatch( createDomain( json.orgUnit ) );
+				if ( json.orgUnit ) {
+					dispatch( createDomain( json.orgUnit ) );
+				}
 			}
 		})
 		.catch( err => dispatch( error( err ) ) );
@@ -78,10 +82,14 @@ function fetchMember( id = '' ) {
 
 function shouldFetchMember( state, id ) {
 	const members = state.member;
-	const member  = members.items[ id ];
-	if ( id && ( ! member || ! member.isFetching ) ) {
+	const member  = (
+		members.items.get( id ) ||
+		members.items.find( d => id === d.get( 'membershipNumber' ) )
+	);
+
+	if ( id && ( ! member || member.didInvalidate ) ) {
 		return true;
-	} else if ( ! id && ( ! members || ! members.isFetching ) ) {
+	} else if ( ! id && ( ! member || ! member.isFetching ) ) {
 		return true;
 	} else {
 		return false;

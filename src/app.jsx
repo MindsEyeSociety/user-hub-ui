@@ -53,7 +53,7 @@ let store = createStore(
 render(
 	<Provider store={ store }>
 		<Router history={ browserHistory }>
-			<Route path='/' component={ App}>
+			<Route path='/' component={ App }>
 				<IndexRoute component={ Profile } />
 				<Route path='domain'>
 					<IndexRoute component={ Domains } />
