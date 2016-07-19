@@ -21,19 +21,12 @@ import { NoMatch } from './shared';
 
 import './app.css';
 
-const navItems = [
-	{ href: '/', name: 'Profile' },
-	{ href: '/domain', name: 'Domains' },
-	{ href: '/member', name: 'Members' },
-	{ href: '/office', name: 'Offices' }
-];
-
 class App extends React.Component {
 	render() {
 		return (
 			<div>
 				<header>
-					<Nav items={ navItems } />
+					<Nav />
 				</header>
 				{ this.props.children }
 			</div>
