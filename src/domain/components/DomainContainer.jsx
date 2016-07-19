@@ -7,14 +7,14 @@ import { Loading } from '../../shared';
 
 class DomainContainer extends React.Component {
 	componentDidMount() {
-		const { dispatch } = this.props;
-		dispatch( fetchDomainIfNeeded( this.id ) );
+		const { dispatch, domainId } = this.props;
+		dispatch( fetchDomainIfNeeded( domainId ) );
 	}
 
 	componentWillReceiveProps( nextProps ) {
 		if ( this.props.location.key !== nextProps.location.key ) {
-			const { dispatch, params } = nextProps;
-			dispatch( fetchDomainIfNeeded( params.id ) );
+			const { dispatch, domainId } = nextProps;
+			dispatch( fetchDomainIfNeeded( domainId ) );
 		}
 	}
 
@@ -32,25 +32,23 @@ class DomainContainer extends React.Component {
 			/> );
 		}
 	}
-
-	get id() {
-		return this.props.params.id;
-	}
 }
 
 DomainContainer.propTypes = {
+	domainId: PropTypes.oneOfType([ PropTypes.number, PropTypes.string ]).isRequired,
 	domain:   PropTypes.object.isRequired,
 	parents:  PropTypes.object.isRequired,
-	childs:   PropTypes.object.isRequired,
+	childs:   PropTypes.object.isRequired, // Children is a reserved prop name.
 	members:  PropTypes.object.isRequired,
 	dispatch: PropTypes.func.isRequired
 }
 
 const mapStateToProps = ( state, props ) => ({
-	domain:  selectors.getDomainById( state, props ),
-	parents: selectors.getParentsForDomain( state, props ),
-	childs:  selectors.getChildrenForDomain( state, props ),
-	members: selectors.getMembersForDomain( state, props ).toList()
+	domainId: selectors.getCurrentId( state, props ),
+	domain:   selectors.getDomainById( state, props ),
+	parents:  selectors.getParentsForDomain( state, props ),
+	childs:   selectors.getChildrenForDomain( state, props ),
+	members:  selectors.getMembersForDomain( state, props ).toList()
 });
 
 export default connect( mapStateToProps )( DomainContainer );

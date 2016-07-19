@@ -1,16 +1,21 @@
 import { createSelector } from 'reselect';
 import { List } from 'immutable';
 
-const getCurrentId = ( state, props ) => props.params.id;
+export const getCurrentId = ( state, props ) => {
+	let id = props.params.id;
+	return Number.parseInt( id, 10 ) || id;
+};
 
 const getDomains = state => state.domain.items;
 
 export const getDomainById = createSelector(
 	getDomains,
 	getCurrentId,
-	( domains, id ) => {
-		return domains.get( id ) || domains.find( d => id === d.get( 'code' ) ) || {};
-	}
+	( domains, id ) => (
+		domains.get( id ) ||
+		domains.find( d => id === d.get( 'code' ) ) ||
+		{}
+	)
 );
 
 export const getDomainList = createSelector(

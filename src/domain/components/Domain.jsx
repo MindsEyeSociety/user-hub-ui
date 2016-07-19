@@ -2,7 +2,7 @@ import React from 'react';
 import { Link } from 'react-router';
 import { DomainItem } from './';
 import { MemberItem } from '../../member';
-import { MaybeItem } from '../../shared';
+import { MaybeItem, MaybeList } from '../../shared';
 
 export default class Domain extends React.Component {
 	render() {
@@ -18,21 +18,19 @@ export default class Domain extends React.Component {
 					<MaybeItem name='Location' value={ domain.location } />
 					<MaybeItem name='Details' value={ domain.defDoc } />
 				</ul>
-				<p>Officers:</p>
-				<p>Children:</p>
-				<ul>
-					{ this.props.childs.map( m => <DomainItem domain={ m } key={ m.id } /> ) }
-				</ul>
-				<p>Members:</p>
-				<ul>
+				<MaybeList name='Officers' show={ 0 } />
+				<MaybeList name='Children' show={ this.props.childs.size }>
+					{ this.props.childs.map( d => <DomainItem domain={ d } key={ d.id } /> ) }
+				</MaybeList>
+				<MaybeList name='Members' show={ this.props.members.size }>
 					{ this.props.members.map( m => <MemberItem member={ m } key={ m.id } /> ) }
-				</ul>
+				</MaybeList>
 			</main>
 		);
 	}
 
 	name() {
-		if ( 'venue' !== this.props.domain.type ) {
+		if ( 'Venue' !== this.props.domain.type ) {
 			return (
 				<h1>
 					<span className='text-muted'>{ this.props.domain.code }:</span>&nbsp;
