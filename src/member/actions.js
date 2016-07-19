@@ -3,6 +3,7 @@ import { Map } from 'immutable';
 
 import { Member, Members } from './models';
 import { createDomain } from '../domain/actions';
+import { setProfileId } from '../profile/actions';
 
 export const REQUEST = 'member/REQUEST';
 function request( id = 0 ) {
@@ -52,7 +53,8 @@ export const ERROR = 'member/ERROR';
 function error( err ) {
 	return {
 		type: ERROR,
-		payload: err
+		payload: err,
+		stack: err.stack
 	};
 }
 
@@ -73,6 +75,9 @@ function fetchMember( id = '' ) {
 				dispatch( receive( json ) );
 				if ( json.orgUnit ) {
 					dispatch( createDomain( json.orgUnit ) );
+				}
+				if ( 'me' === id ) {
+					dispatch( setProfileId( json.id ) );
 				}
 			}
 		})

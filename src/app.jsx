@@ -1,6 +1,6 @@
 import React from 'react';
 import { render } from 'react-dom';
-import { Router, Route, IndexRoute, browserHistory } from 'react-router';
+import { Router, Route, IndexRoute, Redirect, browserHistory } from 'react-router';
 
 import { createStore, applyMiddleware } from 'redux';
 import { Provider } from 'react-redux';
@@ -15,7 +15,6 @@ ImmutableDevTools( Immutable );
 import reducer from './rootReducer';
 
 import { Nav } from './nav';
-import { Profile } from './profile';
 import { Domain, Domains } from './domain';
 import { Member, Members } from './member';
 import { NoMatch } from './shared';
@@ -54,7 +53,7 @@ render(
 	<Provider store={ store }>
 		<Router history={ browserHistory }>
 			<Route path='/' component={ App }>
-				<IndexRoute component={ Profile } />
+				<IndexRoute component={ Member } id='me' />
 				<Route path='domain'>
 					<IndexRoute component={ Domains } />
 					<Route path=':id' component={ Domain } />
@@ -62,6 +61,7 @@ render(
 				</Route>
 				<Route path='member'>
 					<IndexRoute component={ Members } />
+					<Redirect from='me' to='/' />
 					<Route path=':id' component={ Member } />
 					<Route path=':id/edit' component={ Member } editMode={ true } />
 				</Route>

@@ -3,10 +3,16 @@ import { Map } from 'immutable';
 
 const getMembers = state => state.member.items;
 
-export const getCurrentId = ( state, props ) => {
-	let id = props.route.id || props.params.id;
-	return Number.parseInt( id, 10 ) || id;
-}
+export const getCurrentId = createSelector(
+	( state, props ) => props.route.id || props.params.id,
+	state => state.profile.get( 'id' ),
+	( id, currentMember ) => {
+		if ( 'me' === id ) {
+			return currentMember || id;
+		}
+		return Number.parseInt( id, 10 ) || id;
+	}
+);
 
 export const getMemberById = createSelector(
 	getCurrentId,
