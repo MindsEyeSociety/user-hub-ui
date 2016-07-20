@@ -77,7 +77,7 @@ function fetchMember( id = '' ) {
 					dispatch( createDomain( json.orgUnit ) );
 				}
 				if ( 'me' === id ) {
-					dispatch( setProfileId( json.id ) );
+					dispatch( setProfileId( json.id, json.firstName ) );
 				}
 			}
 		})

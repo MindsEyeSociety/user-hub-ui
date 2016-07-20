@@ -20,7 +20,7 @@ class Nav extends React.Component {
 					{ nav }
 				</ul>
 				<span className='pull-xs-right'>
-					<NavLogout name='Ephraim' />
+					<NavLogout name={ this.props.name } />
 				</span>
 			</nav>
 		);
@@ -29,9 +29,11 @@ class Nav extends React.Component {
 
 Nav.propTypes = {
 	items:    PropTypes.object.isRequired,
+	name:     PropTypes.string.isRequired,
 	dispatch: PropTypes.func.isRequired
 }
 
 export default connect( state => ({
-	items: state.nav
+	items: state.nav,
+	name:  state.profile.get( 'name' ) || ''
 }), null, null, { pure: false } )( Nav );

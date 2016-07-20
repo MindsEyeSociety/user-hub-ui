@@ -1,13 +1,13 @@
 import { dispatch } from 'redux';
 
 export const SET = 'profile/SET';
-function set( id ) {
+function set( id, name ) {
 	return {
 		type: SET,
-		payload: id
+		payload: { id, name }
 	};
 }
 
-export function setProfileId( id ) {
-	return dispatch => dispatch( set( id ) );
+export function setProfileId( id, name ) {
+	return dispatch => dispatch( set( id, name ) );
 }
