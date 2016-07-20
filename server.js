@@ -1,7 +1,9 @@
-const express = require( 'express' );
-const path    = require( 'path' );
+const express  = require( 'express' );
+const path     = require( 'path' );
+const readFile = require( 'fs' ).readFile;
 
 const app     = express();
+const config  = require( './config.json' );
 
 app.use( '/static', express.static( 'dist' ) );
 
@@ -10,7 +12,20 @@ app.use( '/static', express.static( 'dist' ) );
  */
 
 app.get( '*', ( req, res ) => {
-	res.sendFile( path.resolve( __dirname, 'index.html' ) );
+	readFile(
+		path.resolve( __dirname, 'index.html' ),
+		'utf-8',
+		( err, html ) => {
+			if ( err ) {
+				console.log( err );
+				res.status( 500 ).send( 'We\'re sorry, something seems to have gone wrong.' );
+			} else {
+				res
+				.set( 'Content-Header', 'text/html' )
+				.send( html.replace( '{}', JSON.stringify( config ) ) );
+			}
+		}
+	);
 });
 
 const port = process.env.PORT || '8080';
