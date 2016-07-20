@@ -7,8 +7,8 @@ class Nav extends React.Component {
 	render() {
 		let nav = this.props.items.map(
 			( item, index ) => (
-				<NavItem key={ index } href={ item.href }>
-					{ item.name }
+				<NavItem key={ index } href={ item.get( 'href' ) }>
+					{ item.get( 'name' ) }
 				</NavItem>
 			)
 		);
@@ -34,4 +34,4 @@ Nav.propTypes = {
 
 export default connect( state => ({
 	items: state.nav
-}) )( Nav );
+}), null, null, { pure: false } )( Nav );
