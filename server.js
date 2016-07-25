@@ -30,7 +30,7 @@ app.get( '*', ( req, res ) => {
 
 const port = process.env.PORT || '8080';
 
-app.listen( port, 'localhost', err => {
+app.listen( port, err => {
 	if ( err ) {
 		return console.error( err );
 	}
