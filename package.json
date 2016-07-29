@@ -9,6 +9,7 @@
   "author": "Ephraim Gregor <ephraimgregor@gmail.com>",
   "license": "ISC",
   "dependencies": {
+    "cookie-parser": "^1.4.3",
     "express": "^4.14.0",
     "immutable": "^3.8.1",
     "moment": "^2.14.1",
