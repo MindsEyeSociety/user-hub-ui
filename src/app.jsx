@@ -18,6 +18,7 @@ import { Nav } from './nav';
 import { Domain, Domains } from './domain';
 import { Member, Members } from './member';
 import { NoMatch } from './shared';
+import { getCurrentUser } from './profile';
 
 import './app.css';
 
@@ -41,6 +42,8 @@ let store = createStore(
 		createLogger()
 	)
 );
+
+store.dispatch( getCurrentUser() );
 
 render(
 	<Provider store={ store }>

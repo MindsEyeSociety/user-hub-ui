@@ -4,15 +4,15 @@ import { Domain, Domains } from './models';
 import { createMembersForDomain } from '../member/actions';
 
 export const REQUEST = 'domain/REQUEST';
-function request( id = 0 ) {
+function request( id ) {
 	return {
 		type: REQUEST,
-		payload: id
+		id
 	};
 }
 
 export const RECEIVE = 'domain/RECEIVE';
-function receive( data ) {
+function receive( data, id ) {
 	let now = Date.now();
 	let domain = Object.assign( {}, data.unit );
 
@@ -27,9 +27,16 @@ function receive( data ) {
 
 	return {
 		type: RECEIVE,
-		id: domain.id,
+		id: id,
 		payload: new Domain( domain ),
 		receivedAt: now
+	};
+}
+
+export const REQUEST_MANY = 'domain/REQUEST_MANY';
+function requestMany() {
+	return {
+		type: REQUEST_MANY
 	};
 }
 
@@ -73,7 +80,11 @@ function error( err ) {
 
 function fetchDomain( id = '' ) {
 	return dispatch => {
-		dispatch( request( id || 0 ) );
+		if ( id ) {
+			dispatch( request( id ) );
+		} else {
+			dispatch( requestMany() );
+		}
 		return fetch( 'http://localhost:3000/v1/org-unit/' + id + '?token=DEV' )
 		.then( response => {
 			if ( 200 !== response.status ) {
@@ -85,7 +96,7 @@ function fetchDomain( id = '' ) {
 			if ( Array.isArray( json ) ) {
 				return dispatch( receiveMany( json ) );
 			} else {
-				dispatch( receive( json ) );
+				dispatch( receive( json, id ) );
 				dispatch( receiveMany( [].concat( json.parents, json.children ) ) );
 				dispatch( createMembersForDomain( json.unit.users, json.unit.id ) );
 			}
@@ -96,10 +107,16 @@ function fetchDomain( id = '' ) {
 
 function shouldFetchDomain( state, id ) {
 	const domains = state.domain;
-	const domain  = domains.items.get( id ) || domains.items.find( d => id === d.get( 'code' ) );
-	if ( id && ( ! domain || domain.didInvalidate ) ) {
+	const domain  = (
+		domains.items.get( id ) ||
+		domains.items.find( d => id === d.get( 'code' ) )
+	);
+
+	if ( ! domain ) {
 		return true;
-	} else if ( ! id && ( ! domains || ! domains.isFetching ) ) {
+	} else if ( domain.isFetching ) {
+		return false;
+	} else if ( domain.didInvalidate ) {
 		return true;
 	} else {
 		return false;
@@ -116,20 +133,30 @@ export function fetchDomainIfNeeded( id ) {
 	};
 }
 
-export function fetchDomainsIfNeeded() {
-	return ( dispatch, getState ) => {
-		if ( shouldFetchDomain( getState() ) ) {
-			return dispatch( fetchDomain() );
-		} else {
-			return Promise.resolve();
-		}
-	};
-}
-
 export function createDomain( domain ) {
 	return ( dispatch, getState ) => {
 		if ( shouldFetchDomain( getState(), domain.id ) ) {
 			dispatch( create( domain ) );
+		}
+	};
+}
+
+function shouldFetchDomains( state ) {
+	const domains = state.domain;
+
+	if ( domains.isFetching ) {
+		return false;
+	} else {
+		return true;
+	}
+}
+
+export function fetchDomainsIfNeeded() {
+	return ( dispatch, getState ) => {
+		if ( shouldFetchDomains( getState() ) ) {
+			return dispatch( fetchDomain() );
+		} else {
+			return Promise.resolve();
 		}
 	};
 }

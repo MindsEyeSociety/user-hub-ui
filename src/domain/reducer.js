@@ -1,24 +1,25 @@
 import * as actions from './actions';
-import { Domains } from './models';
+import { Domains, Domain } from './models';
 
 const initialState = new Domains();
 
 export default function( state = initialState, action ) {
 	switch ( action.type ) {
 		case actions.REQUEST:
-			let newState = state.set( 'isFetching', true );
-
-			if ( action.id ) {
-				newState = newState.setIn( [ 'items', action.id, 'isFetching' ], true );
-			}
-			return newState;
+			return state.updateIn(
+				[ 'items', action.id ],
+				new Domain({ id: action.id }),
+				domain => domain.set( 'isFetching', true )
+			);
 
 		case actions.RECEIVE:
 		case actions.CREATE:
 			return state
-			.setIn( [ 'items', action.id ], action.payload )
-			.set( 'lastUpdated', action.receivedAt )
-			.set( 'isFetching', false );
+				.deleteIn( [ 'items', action.id ] )
+				.setIn( [ 'items', action.payload.id ], action.payload );
+
+		case actions.REQUEST_MANY:
+			return state.set( 'isFetching', true );
 
 		case actions.RECEIVE_MANY:
 			// Override invalid items only.
@@ -28,9 +29,9 @@ export default function( state = initialState, action ) {
 			);
 
 			return state
-			.set( 'items', newItems )
-			.set( 'lastUpdated', action.receivedAt )
-			.set( 'isFetching', false );
+				.set( 'items', newItems )
+				.set( 'lastUpdated', action.receivedAt )
+				.set( 'isFetching', false );
 
 		case actions.ERROR:
 			console.error( action.payload );

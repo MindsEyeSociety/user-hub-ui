@@ -1,5 +1,6 @@
 import { createSelector } from 'reselect';
 import { List } from 'immutable';
+import { Domain } from './models';
 
 export const getCurrentId = ( state, props ) => {
 	let id = props.params.id;
@@ -14,7 +15,7 @@ export const getDomainById = createSelector(
 	( domains, id ) => (
 		domains.get( id ) ||
 		domains.find( d => id === d.get( 'code' ) ) ||
-		{}
+		new Domain({ id: 0 })
 	)
 );
 

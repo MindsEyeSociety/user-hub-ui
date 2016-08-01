@@ -2,19 +2,19 @@ import { dispatch } from 'redux';
 import { Map } from 'immutable';
 
 import { Member, Members } from './models';
-import { createDomain } from '../domain/actions';
-import { setProfileId } from '../profile/actions';
+import { createDomain } from '../domain';
+import { setProfileId } from '../profile';
 
 export const REQUEST = 'member/REQUEST';
-function request( id = 0 ) {
+function request( id ) {
 	return {
 		type: REQUEST,
-		payload: id
+		id
 	};
 }
 
 export const RECEIVE = 'member/RECEIVE';
-function receive( data ) {
+function receive( data, id ) {
 	data = Object.assign( {}, data );
 	let now = Date.now();
 	data.lastUpdated = now;
@@ -23,9 +23,16 @@ function receive( data ) {
 	}
 	return {
 		type: RECEIVE,
-		id: data.id,
+		id: id,
 		payload: new Member( data ),
 		receivedAt: now
+	};
+}
+
+export const REQUEST_MANY = 'member/REQUEST_MANY';
+function requestMany() {
+	return {
+		type: REQUEST_MANY
 	};
 }
 
@@ -41,10 +48,7 @@ function receiveMany( data ) {
 
 	return {
 		type: RECEIVE_MANY,
-		payload: new Members({
-			lastUpdated: now,
-			items: new Map( members )
-		}),
+		payload: new Map( members ),
 		receivedAt: now
 	};
 }
@@ -60,7 +64,11 @@ function error( err ) {
 
 function fetchMember( id = '' ) {
 	return dispatch => {
-		dispatch( request( id || 0 ) );
+		if ( id ) {
+			dispatch( request( id ) );
+		} else {
+			dispatch( requestMany() );
+		}
 		return fetch( 'http://localhost:3000/v1/user/' + id + '?token=DEV' )
 		.then( response => {
 			if ( 200 !== response.status ) {
@@ -72,7 +80,7 @@ function fetchMember( id = '' ) {
 			if ( Array.isArray( json ) ) {
 				return dispatch( receiveMany( json ) );
 			} else {
-				dispatch( receive( json ) );
+				dispatch( receive( json, id ) );
 				if ( json.orgUnit ) {
 					dispatch( createDomain( json.orgUnit ) );
 				}
@@ -87,14 +95,21 @@ function fetchMember( id = '' ) {
 
 function shouldFetchMember( state, id ) {
 	const members = state.member;
+
+	if ( 'me' === id ) {
+		id = state.profile.get( 'id' );
+	}
+
 	const member  = (
 		members.items.get( id ) ||
 		members.items.find( d => id === d.get( 'membershipNumber' ) )
 	);
 
-	if ( id && ( ! member || member.didInvalidate ) ) {
+	if ( ! member ) {
 		return true;
-	} else if ( ! id && ( ! member || ! member.isFetching ) ) {
+	} else if ( member.isFetching ) {
+		return false;
+	} else if ( member.didInvalidate ) {
 		return true;
 	} else {
 		return false;
@@ -111,9 +126,19 @@ export function fetchMemberIfNeeded( id ) {
 	};
 }
 
+function shouldFetchMembers( state ) {
+	const members = state.member;
+
+	if ( ! members.isFetching ) {
+		return true;
+	} else {
+		return false;
+	}
+}
+
 export function fetchMembersIfNeeded() {
 	return ( dispatch, getState ) => {
-		if ( shouldFetchMember( getState() ) ) {
+		if ( shouldFetchMembers( getState() ) ) {
 			return dispatch( fetchMember() );
 		} else {
 			return Promise.resolve();
