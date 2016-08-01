@@ -1,7 +1,9 @@
 import { dispatch } from 'redux';
 import { Map, List } from 'immutable';
+
 import { Domain, Domains } from './models';
-import { createMembersForDomain } from '../member/actions';
+import { api } from '../shared';
+import { createMembersForDomain } from '../member';
 
 export const REQUEST = 'domain/REQUEST';
 function request( id ) {
@@ -85,13 +87,7 @@ function fetchDomain( id = '' ) {
 		} else {
 			dispatch( requestMany() );
 		}
-		return fetch( 'http://localhost:3000/v1/org-unit/' + id + '?token=DEV' )
-		.then( response => {
-			if ( 200 !== response.status ) {
-				throw new Error( 'Invalid status found: ' + response.status );
-			}
-			return response.json();
-		})
+		return api.get( '/org-unit/' + id )
 		.then( json => {
 			if ( Array.isArray( json ) ) {
 				return dispatch( receiveMany( json ) );

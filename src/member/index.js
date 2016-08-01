@@ -9,5 +9,6 @@ export const NAME = 'member';
 export const Members = components.MembersContainer;
 export const Member = components.MemberContainer;
 export const MemberItem = components.MemberItem;
+export const createMembersForDomain = actions.createMembersForDomain;
 
 export default { actions, components, models, reducer, selectors, NAME };

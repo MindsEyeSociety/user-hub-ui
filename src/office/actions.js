@@ -2,6 +2,7 @@ import { dispatch } from 'redux';
 import { Map } from 'immutable';
 
 import { Offices, Office } from './models';
+import { api } from '../shared';
 import { createDomain } from '../domain';
 import { setProfileOffices } from '../profile';
 
@@ -65,13 +66,7 @@ function error( err ) {
 function fetchOffice( id ) {
 	return dispatch => {
 		dispatch( request( id ) );
-		return fetch( 'http://localhost:3000/v1/office/' + id + '?token=DEV' )
-		.then( response => {
-			if ( 200 !== response.status ) {
-				throw new Error( 'Invalid status found: ' + response.status );
-			}
-			return response.json();
-		})
+		return api.get( '/office/' + id )
 		.then( json => {
 			dispatch( receive( json ) );
 			if ( json.orgUnit ) {
@@ -106,13 +101,7 @@ export function fetchOfficeIfNeeded( id ) {
 export function fetchCurrentOffices() {
 	return dispatch => {
 		dispatch( requestMany() );
-		return fetch( 'http://localhost:3000/v1/office/me?token=DEV' )
-		.then( response => {
-			if ( 200 !== response.status ) {
-				throw new Error( 'Invalid status found: ' + response.status );
-			}
-			return response.json();
-		})
+		return api.get( '/office/me' )
 		.then( json => {
 			dispatch( receiveMany( json ) );
 			dispatch( setProfileOffices( json.map( o => o.id ) ) );

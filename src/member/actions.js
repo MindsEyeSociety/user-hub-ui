@@ -2,6 +2,7 @@ import { dispatch } from 'redux';
 import { Map } from 'immutable';
 
 import { Member, Members } from './models';
+import { api } from '../shared';
 import { createDomain } from '../domain';
 import { setProfileId } from '../profile';
 
@@ -69,13 +70,7 @@ function fetchMember( id = '' ) {
 		} else {
 			dispatch( requestMany() );
 		}
-		return fetch( 'http://localhost:3000/v1/user/' + id + '?token=DEV' )
-		.then( response => {
-			if ( 200 !== response.status ) {
-				throw new Error( 'Invalid status found: ' + response.status );
-			}
-			return response.json();
-		})
+		return api.get( '/user/' + id )
 		.then( json => {
 			if ( Array.isArray( json ) ) {
 				return dispatch( receiveMany( json ) );
