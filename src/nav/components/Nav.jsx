@@ -19,7 +19,7 @@ class Nav extends React.Component {
 				<ul className='nav navbar-nav'>
 					{ nav }
 				</ul>
-				<span className='pull-xs-right'>
+				<span className='float-xs-right'>
 					<NavLogout name={ this.props.name } />
 				</span>
 			</nav>

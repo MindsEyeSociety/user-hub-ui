@@ -12,7 +12,7 @@ export const Domain = new Record({
 	offices: new List(),
 	children: new List(),
 	parents: new List(),
-	portalID: undefined,
+	venueType: undefined,
 	didInvalidate: false,
 	isFetching: false,
 	lastUpdated: undefined

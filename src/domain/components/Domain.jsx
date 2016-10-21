@@ -1,5 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router';
+import Linkify from 'react-linkify';
 import { DomainItem } from './';
 import { MemberItem } from '../../member';
 import { MaybeItem, MaybeList } from '../../shared';
@@ -7,6 +8,20 @@ import { MaybeItem, MaybeList } from '../../shared';
 export default class Domain extends React.Component {
 	render() {
 		let domain = this.props.domain;
+
+		let details = <MaybeItem name='Details' value={ domain.defDoc } />;
+		if ( domain.defDoc && domain.defDoc.length > 100 ) {
+			let defDoc = domain.defDoc.split( /(\\n)/g ).map( ( line, index ) => {
+				if ( line.match( /(\\n)/g ) ) {
+					return React.createElement( 'br', { key: index } );
+				} else {
+					return line;
+				}
+			});
+			details = (
+				<li>Details:<br /><Linkify>{ defDoc }</Linkify></li>
+			);
+		}
 
 		return (
 			<main id='app'>
@@ -16,7 +31,8 @@ export default class Domain extends React.Component {
 				<ul>
 					<MaybeItem name='Website' extLink={ domain.website } />
 					<MaybeItem name='Location' value={ domain.location } />
-					<MaybeItem name='Details' value={ domain.defDoc } />
+					<MaybeItem name='Venue Type' value={ domain.venueType } />
+					{ details }
 				</ul>
 				<MaybeList name='Officers' show={ 0 } />
 				<MaybeList name='Children' show={ this.props.childs.size }>
