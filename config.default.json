@@ -1,4 +1,5 @@
 {
 	"hubUrl": "http://localhost:3000/v1",
-	"userLogOutUrl": "https://portal.mindseyesociety.org/logout"
+	"userLogOutUrl": "https://portal.mindseyesociety.org/logout",
+	"clientKey": "ui"
 }
